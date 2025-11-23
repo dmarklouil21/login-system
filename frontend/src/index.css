@@ -11,7 +11,7 @@
   color: rgba(255, 255, 255, 0.87); /* Default text color in dark mode */
   background-color: #242424;
 
-  /* Improves text sharpness and font rendering across browsers */
+  
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
