@@ -1,68 +1,95 @@
+/* 
+  Root-level variables and global styling.
+  Applies base font, colors, rendering optimizations, and dark mode defaults.
+*/
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif; /* Default font stack */
+  line-height: 1.5; /* Improve readability */
+  font-weight: 400; /* Normal text weight */
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color-scheme: light dark; /* Supports automatic dark/light themes */
+  color: rgba(255, 255, 255, 0.87); /* Default text color in dark mode */
+  background-color: #242424; /* Default dark background */
 
+  /* Improves text sharpness and font rendering across browsers */
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* 
+  Anchor link styling.
+  Removes underline and sets default color.
+*/
 a {
   font-weight: 500;
-  color: #646cff;
+  color: #646cff; /* Base link color */
   text-decoration: inherit;
 }
+
 a:hover {
-  color: #535bf2;
+  color: #535bf2; /* Hover effect for links */
 }
 
+/* 
+  Body layout and sizing.
+  Ensures the app takes full height and centers its content.
+*/
 body {
-  margin: 0;
+  margin: 0; /* Remove default browser margin */
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  place-items: center; /* Centers content vertically & horizontally */
+  min-width: 320px; /* Prevent overly small layouts */
+  min-height: 100vh; /* Full viewport height */
 }
 
+/* Main heading style */
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
 
+/* 
+  Button styling.
+  Applies rounded corners, transitions, and modern UI style.
+*/
 button {
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+  font-family: inherit; /* Match global font */
+  background-color: #1a1a1a; /* Dark background button */
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  transition: border-color 0.25s; /* Smooth hover effect */
 }
 
+button:hover {
+  border-color: #646cff; /* Highlight button on hover */
+}
+
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color; /* Accessibility focus indicator */
+}
+
+/*
+  Light mode (when user prefers light theme).
+  Overrides dark defaults above.
+*/
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    color: #213547; /* Darker text for light backgrounds */
+    background-color: #ffffff; /* Light mode background */
   }
+
   a:hover {
-    color: #747bff;
+    color: #747bff; /* Hover color for links in light mode */
   }
+
   button {
-    background-color: #f9f9f9;
+    background-color: #f9f9f9; /* Light button background */
   }
 }
