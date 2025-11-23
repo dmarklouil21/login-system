@@ -3,7 +3,7 @@
   Applies base font, colors, rendering optimizations, and dark mode defaults.
 */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif; /* Default font stack */
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif; 
   line-height: 1.5; /* Improve readability */
   font-weight: 400; /* Normal text weight */
 
