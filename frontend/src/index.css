@@ -20,7 +20,7 @@
 
 /* 
   Anchor link styling.
-
+  Removes underline and sets default color.
 */
 a {
   font-weight: 500;
