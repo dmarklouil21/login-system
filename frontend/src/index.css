@@ -7,7 +7,7 @@
   line-height: 1.5; /* Improve readability */
   font-weight: 400; /* Normal text weight */
 
-  color-scheme: light dark; 
+  color-scheme: light dark; /* Supports automatic dark/light themes */
   color: rgba(255, 255, 255, 0.87); /* Default text color in dark mode */
   background-color: #242424;
 
