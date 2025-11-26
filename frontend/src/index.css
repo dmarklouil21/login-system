@@ -1,6 +1,6 @@
 /* 
   Root-level variables and global styling.
-  Applies base font, colors, rendering optimizations, and dark mode defaults.
+  
 */
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif; /* Default font stack */
