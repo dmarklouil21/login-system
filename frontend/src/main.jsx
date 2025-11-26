@@ -11,8 +11,7 @@ import './index.css'
 // Import the main application component.
 import App from './App.jsx'
 
-// Create a React root from the HTML element with id="root"
-// and render the App inside it.
+
 createRoot(document.getElementById('root')).render(
   // StrictMode wraps the application and enables extra checks/warnings
   // to help developers catch potential bugs early.
