@@ -15,7 +15,7 @@ import App from './App.jsx'
 // and render the App inside it.
 createRoot(document.getElementById('root')).render(
   // StrictMode wraps the application and enables extra checks/warnings
-  // to help developers catch potential bugs early.
+ 
   <StrictMode>
     <App />
   </StrictMode>,
