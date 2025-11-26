@@ -24,6 +24,7 @@ function App() {
   // Data State
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [user, setUser] = useState(null);
   const [protectedData, setProtectedData] = useState('');
 
@@ -39,6 +40,12 @@ function App() {
     setLoading(true);
     setError('');
     setMessage('');
+
+    if (!isLogin && password !== confirmPassword) {
+      setError("Passwords do not match.");
+      setLoading(false);
+      return; // Stop the function here
+    }
 
     try {
       if (isLogin) {
@@ -95,6 +102,13 @@ function App() {
         setLoading(false);
     }
   }
+
+  const toggleAuthMode = () => {
+    setIsLogin(!isLogin);
+    setError('');
+    setMessage('');
+    setConfirmPassword(''); // This clears the new field when switching
+  };
 
   const handleLogout = async () => {
     try {
@@ -165,6 +179,20 @@ function App() {
               <label>Password</label>
               <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required placeholder="••••••••" />
             </div>
+
+            {!isLogin && (
+              <div className="input-group">
+                <label>Confirm Password</label>
+                <input
+                  type="password"
+                  placeholder="••••••••"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                />
+              </div>
+            )}
+
             <button type="submit" className="btn-primary" disabled={loading}>
               {loading ? 'Processing...' : (isLogin ? 'Sign In' : 'Sign Up')}
             </button>
@@ -173,7 +201,7 @@ function App() {
           <div className="auth-footer">
             <p>
               {isLogin ? "Don't have an account? " : "Already have an account? "}
-              <span onClick={() => setIsLogin(!isLogin)} className="link-text">
+              <span onClick={toggleAuthMode} className="link-text">
                 {isLogin ? 'Sign up' : 'Log in'}
               </span>
             </p>
