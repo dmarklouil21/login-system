@@ -2,7 +2,7 @@
 // during development (does NOT affect production builds).
 import { StrictMode } from 'react'
 
-
+// Import createRoot from React 18 — the modern way of rendering apps.
 import { createRoot } from 'react-dom/client'
 
 // Import global CSS styles applied to the entire application.
