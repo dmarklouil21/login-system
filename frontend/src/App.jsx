@@ -14,6 +14,9 @@ import { auth } from './firebase';
 import axios from 'axios';
 import './App.css';
 
+const API_URL = import.meta.env.VITE_API_URL;
+axios.defaults.baseURL = API_URL;
+
 function App() {
   // UI State
   const [isLogin, setIsLogin] = useState(true);
