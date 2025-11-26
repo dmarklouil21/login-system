@@ -1,35 +1,3 @@
-/**
- * App Component
- *
- * Purpose:
- * - Provides a basic Firebase Authentication system (Login, Signup, Logout).
- * - Allows users to fetch protected and public API data using JWT tokens.
- *
- * Dependencies:
- * - Firebase Authentication (email/password)
- * - Axios for API requests
- * - React Hooks (useState, useEffect)
- *
- * Main Features:
- * - User signup and login using Firebase.
- * - Fetch public API data without authentication.
- * - Fetch protected API data using Bearer token from Firebase.
- * - Automatically listens for authentication state changes using onAuthStateChanged.
- *
- * Inputs:
- * - User enters email and password.
- *
- * Outputs:
- * - Displays login/signup UI when no user is logged in.
- * - Displays dashboard with API access when logged in.
- * - Shows server responses, errors, and authentication status.
- *
- * Edge Cases / Limitations:
- * - Fetching protected data assumes a valid Firebase token.
- * - No input validation besides required fields.
- * - Server endpoints must exist at /api/public and /api/protected.
- */
-
 import React, { useState, useEffect } from 'react';
 import { 
   signInWithEmailAndPassword, 
@@ -49,10 +17,6 @@ function App() {
   const [protectedData, setProtectedData] = useState('');
   const [error, setError] = useState('');
 
-  /**
-   * Listens for authentication state changes.
-   * Purpose: Keep track of logged-in user even after refresh.
-   */
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
@@ -60,11 +24,6 @@ function App() {
     return () => unsubscribe();
   }, []);
 
-  /**
-   * Logs in an existing user using Firebase email/password authentication.
-   * Inputs: email, password from state
-   * Output: Authenticated user session or error message
-   */
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -79,11 +38,6 @@ function App() {
     }
   };
 
-  /**
-   * Creates a new Firebase user account.
-   * Inputs: email, password
-   * Output: New user account or error message
-   */
   const handleSignup = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -98,10 +52,6 @@ function App() {
     }
   };
 
-  /**
-   * Logs out the current user.
-   * Clears protected data on logout.
-   */
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -111,11 +61,6 @@ function App() {
     }
   };
 
-  /**
-   * Fetches protected API data.
-   * Requires: User must be logged in & Firebase token must be valid.
-   * Output: Message returned by backend protected endpoint.
-   */
   const fetchProtectedData = async () => {
     try {
       const token = await auth.currentUser.getIdToken();
@@ -130,10 +75,6 @@ function App() {
     }
   };
 
-  /**
-   * Fetches publicly available API data.
-   * No authentication required.
-   */
   const fetchPublicData = async () => {
     try {
       const response = await axios.get('/api/public');
