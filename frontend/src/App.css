@@ -48,30 +48,26 @@ input {
   margin: 15px 0;
 }
 
-/* General button style */
 button {
-  padding: 10px 15px; /* Inner spacing */
-  border: none; /* Remove border line */
-  border-radius: 4px; /* Slightly rounded corners */
-  background: #007bff; /* Default blue color */
-  color: white; /* Button text color */
-  cursor: pointer; /* Pointer cursor on hover */
-  flex: 1; /* Buttons share equal width */
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  background: #007bff;
+  color: white;
+  cursor: pointer;
+  flex: 1;
 }
 
-/* Hover effect for all buttons */
 button:hover {
-  background: #0056b3; /* Darker blue on hover */
+  background: #0056b3;
 }
 
-/* Logout button style */
 button.logout {
-  background: #dc3545; /* Red color for logout */
+  background: #dc3545;
 }
 
-/* Hover effect for logout button */
 button.logout:hover {
-  background: #c82333; /* Darker red */
+  background: #c82333;
 }
 
 .error {
@@ -105,6 +101,14 @@ button.logout:hover {
 
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
-    animation: logo-s
+    animation: logo-spin infinite 20s linear;
   }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
 }
