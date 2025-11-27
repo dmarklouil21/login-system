@@ -47,7 +47,7 @@ function App() {
     try {
       await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
-      setError(error.message); // Display login errors
+      setError(error.message); 
     } finally {
       setLoading(false);
     }
