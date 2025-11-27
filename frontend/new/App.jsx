@@ -40,7 +40,7 @@ function App() {
 
   // Handle user login
   const handleLogin = async (e) => {
-    e.preventDefault(); // Prevent page reload
+    e.preventDefault(); 
     setLoading(true);
     setError('');
     
