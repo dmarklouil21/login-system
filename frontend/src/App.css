@@ -1,107 +1,95 @@
-/* Root container styling */
 #root {
   max-width: 1280px;
-  margin: 0 auto; /* Center horizontally */
+  margin: 0 auto;
   padding: 2rem;
   text-align: center;
 }
+/* comment*/
 
-/* Logo styles */
 .logo {
   height: 6em;
   padding: 1.5em;
-  will-change: filter; /* Optimization for animation */
+  will-change: filter;
   transition: filter 300ms;
 }
-
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa); /* Blue shadow on hover */
+  filter: drop-shadow(0 0 2em #646cffaa);
 }
-
 .logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa); /* React logo hover shadow */
+  filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
-/* Main form container */
+/* N */
 .container {
   max-width: 400px;
-  margin: 50px auto; /* Center form */
+  margin: 50px auto;
   padding: 20px;
   font-family: Arial, sans-serif;
 }
 
-/* Form box styling */
 .auth-form {
   background: #f5f5f5;
   padding: 20px;
-  border-radius: 8px; /* Rounded corners */
+  border-radius: 8px;
 }
 
-/* Input fields */
 input {
-  width: 100%; /* Full width */
+  width: 100%;
   padding: 10px;
   margin: 10px 0;
-  border: 1px solid #ddd; /* Light border */
+  border: 1px solid #ddd;
   border-radius: 4px;
-  box-sizing: border-box; /* Prevents overflow */
+  box-sizing: border-box;
 }
 
-/* Grouping buttons side by side */
 .button-group {
   display: flex;
   gap: 10px;
   margin: 15px 0;
 }
 
-/* Default button style */
 button {
   padding: 10px 15px;
   border: none;
   border-radius: 4px;
-  background: #007bff; /* Primary blue */
+  background: #007bff;
   color: white;
   cursor: pointer;
-  flex: 1; /* Equal width */
+  flex: 1;
 }
 
 button:hover {
-  background: #0056b3; /* Darker blue on hover */
+  background: #0056b3;
 }
 
-/* Logout button style (red) */
 button.logout {
   background: #dc3545;
 }
 
 button.logout:hover {
-  background: #c82333; /* Darker red */
+  background: #c82333;
 }
 
-/* Error alert box */
 .error {
-  background: #f8d7da; /* Light red background */
-  color: #721c24; /* Dark red text */
+  background: #f8d7da;
+  color: #721c24;
   padding: 10px;
   border-radius: 4px;
   margin: 10px 0;
 }
 
-/* Success / data display box */
 .data-display {
-  background: #d4edda; /* Light green background */
-  color: #155724; /* Dark green text */
+  background: #d4edda;
+  color: #155724;
   padding: 15px;
   border-radius: 4px;
   margin-top: 20px;
 }
 
-/* Dashboard alignment */
 .dashboard {
   text-align: center;
 }
 
-/* Logo rotation animation */
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
@@ -111,19 +99,16 @@ button.logout:hover {
   }
 }
 
-/* Apply animation only when reduced-motion is not requested */
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
   }
 }
 
-/* Reusable card padding */
 .card {
   padding: 2em;
 }
 
-/* Faint text style */
 .read-the-docs {
   color: #888;
 }
