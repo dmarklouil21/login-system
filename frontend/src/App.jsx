@@ -2,6 +2,7 @@
  * App Component
  * Strict Mode: Dashboard is inaccessible until email is verified.
  */
+ /* Testing CI/CD implementation */
 import React, { useState, useEffect } from 'react';
 import { 
   signInWithEmailAndPassword, 
