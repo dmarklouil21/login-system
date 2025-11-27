@@ -72,7 +72,7 @@ function App() {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      setProtectedData(''); // Clear displayed server data
+      setProtectedData(''); 
     } catch (error) {
       setError(error.message);
     }
