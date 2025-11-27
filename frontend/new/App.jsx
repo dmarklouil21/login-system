@@ -15,7 +15,7 @@ function App() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // Stores the currently logged-in user
+  
   const [user, setUser] = useState(null);
 
   // Loading state for async operations
