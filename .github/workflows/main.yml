@@ -1,62 +1,75 @@
-name: CI Check
+name: Full Stack CI Pipeline
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+on: [push, pull_request]
 
 jobs:
-  # JOB 1: CHECK THE FRONTEND (React)
-  frontend-check:
+  # -------------------------------
+  # FRONTEND JOBS (React)
+  # -------------------------------
+  frontend-install:
     runs-on: ubuntu-latest
-    
-    # MAGIC LINE: This tells all steps in this job to run inside '/frontend'
     defaults:
       run:
         working-directory: ./frontend
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install Frontend
+        run: npm ci
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-        # This helps caching specifically for the frontend folder
-        cache: 'npm'
-        cache-dependency-path: frontend/package-lock.json
+  frontend-test:
+    needs: frontend-install
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Install Frontend
+        run: npm ci
+      # 1. Check for messy code
+      - name: Frontend Lint
+        run: npm run lint
+      # 2. Check if it builds
+      - name: Frontend Build
+        run: npm run build
+        env:
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
 
-    - name: Install Frontend Dependencies
-      run: npm install
-
-    - name: Test Build (React)
-      run: npm run build
-
-  # JOB 2: CHECK THE BACKEND (Node/Express)
-  # This runs at the same time as the frontend check!
+  # -------------------------------
+  # BACKEND JOBS (Node/Express)
+  # -------------------------------
   backend-check:
     runs-on: ubuntu-latest
-    
     defaults:
       run:
         working-directory: ./backend
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-        cache: 'npm'
-        cache-dependency-path: backend/package-lock.json
-
-    - name: Install Backend Dependencies
-      run: npm install
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
       
-    # If you have a test script in backend/package.json, uncomment this:
-    # - name: Run Backend Tests
-    #   run: npm test
+      # 1. Does the backend install correctly?
+      - name: Install Backend
+        run: npm ci
+
+      # 2. OPTIONAL: Run tests if you have them
+      # If you haven't written tests (Jest/Mocha), DELETE this step or it will fail!
+      # - name: Run Backend Tests
+      #   run: npm test
