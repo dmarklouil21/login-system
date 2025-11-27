@@ -1,8 +1,10 @@
 /**
  * App Component
- * Strict Mode: Dashboard is inaccessible until email is verified.
+ * Features: 
+ * - Login/Signup with Firebase
+ * - Email Verification Gate
+ * - Client-side Rate Limiting (Cool Down)
  */
- /* Testing CI/CD implementation */
 import React, { useState, useEffect } from 'react';
 import { 
   signInWithEmailAndPassword, 
@@ -15,6 +17,10 @@ import { auth } from './firebase';
 import axios from 'axios';
 import './App.css';
 
+// --- CONFIGURATION ---
+const MAX_ATTEMPTS = 3;
+const COOLDOWN_SECONDS = 30; // 30 seconds lockout
+
 const API_URL = import.meta.env.VITE_API_URL;
 axios.defaults.baseURL = API_URL;
 
@@ -25,6 +31,15 @@ function App() {
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
 
+  // Rate Limiting State (Initializes from LocalStorage)
+  const [attempts, setAttempts] = useState(() => {
+    return parseInt(localStorage.getItem('loginAttempts') || '0');
+  });
+  const [lockoutTime, setLockoutTime] = useState(() => {
+    return parseInt(localStorage.getItem('lockoutUntil') || '0');
+  });
+  const [timeLeft, setTimeLeft] = useState(0);
+
   // Data State
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -32,6 +47,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [protectedData, setProtectedData] = useState('');
 
+  // 1. Auth Listener
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
@@ -39,29 +55,88 @@ function App() {
     return () => unsubscribe();
   }, []);
 
+  // 2. Lockout Timer Logic
+  useEffect(() => {
+    // Only run if we have a lockout timestamp in the future
+    if (lockoutTime > Date.now()) {
+      const interval = setInterval(() => {
+        const remaining = Math.ceil((lockoutTime - Date.now()) / 1000);
+        
+        if (remaining <= 0) {
+          // Time is up! Reset everything.
+          setLockoutTime(0);
+          setAttempts(0);
+          localStorage.removeItem('lockoutUntil');
+          localStorage.removeItem('loginAttempts');
+          setError('');
+          clearInterval(interval);
+        } else {
+          // Update countdown
+          setTimeLeft(remaining);
+          setError(`Too many attempts. Please wait ${remaining}s.`);
+        }
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [lockoutTime]);
+
+  // Handle Form Submit
   const handleAuthSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError('');
     setMessage('');
 
+    // A. Check if Locked Out
+    if (lockoutTime > Date.now()) {
+        return; // Stop here, do not call Firebase
+    }
+
+    // B. Check Passwords (Signup only)
     if (!isLogin && password !== confirmPassword) {
       setError("Passwords do not match.");
-      setLoading(false);
-      return; // Stop the function here
+      return;
     }
+
+    setLoading(true);
 
     try {
       if (isLogin) {
         await signInWithEmailAndPassword(auth, email, password);
+        
+        // Success! Clear any existing attempts
+        setAttempts(0);
+        setLockoutTime(0);
+        localStorage.removeItem('loginAttempts');
+        localStorage.removeItem('lockoutUntil');
+        
       } else {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         await sendEmailVerification(userCredential.user);
         setMessage('Verification email sent! Please check your inbox.');
       }
     } catch (error) {
+      console.error(error);
       const msg = error.message.replace('Firebase: ', '').replace('auth/', '');
-      setError(msg);
+      
+      // C. Handle Failed Login Attempts
+      if (isLogin) {
+        const newAttempts = attempts + 1;
+        setAttempts(newAttempts);
+        localStorage.setItem('loginAttempts', newAttempts);
+
+        if (newAttempts >= MAX_ATTEMPTS) {
+            const lockoutTimestamp = Date.now() + (COOLDOWN_SECONDS * 1000);
+            setLockoutTime(lockoutTimestamp);
+            localStorage.setItem('lockoutUntil', lockoutTimestamp);
+            setError(`Too many failed attempts. Locked for ${COOLDOWN_SECONDS}s.`);
+        } else {
+            setError(`${msg} (${MAX_ATTEMPTS - newAttempts} attempts remaining)`);
+        }
+      } else {
+        setError(msg);
+      }
+
     } finally {
       setLoading(false);
     }
@@ -72,7 +147,6 @@ function App() {
     setError('');
     setMessage('');
     try {
-      // FIX: Use auth.currentUser here too
       await sendEmailVerification(auth.currentUser);
       setMessage('New verification email sent.');
     } catch (error) {
@@ -87,14 +161,9 @@ function App() {
     setLoading(true);
     setError('');
     try {
-        // FIX: Always call reload on the official auth instance, 
-        // not the 'user' state variable which might be a copy.
         await auth.currentUser.reload(); 
-        
-        // We still need to update state to trigger the UI refresh
         setUser({ ...auth.currentUser }); 
         
-        // Check the official auth instance for the new status
         if (auth.currentUser.emailVerified) {
             setMessage('Email verified! Unlocking dashboard...');
         } else {
@@ -112,7 +181,9 @@ function App() {
     setIsLogin(!isLogin);
     setError('');
     setMessage('');
-    setConfirmPassword(''); // This clears the new field when switching
+    setConfirmPassword('');
+    // Optional: Clear attempts when switching modes? 
+    // Usually better to keep them to prevent spamming.
   };
 
   const handleLogout = async () => {
@@ -160,11 +231,10 @@ function App() {
 
   // --- RENDER LOGIC ---
 
-  // 1. Loading State
-  // (Optional: You can add a full screen loader here if you want)
-
-  // 2. Not Logged In -> Show Login/Signup
   if (!user) {
+    // Helper to see if locked out
+    const isLocked = lockoutTime > Date.now();
+
     return (
       <div className="app-container">
         <div className="circle circle-1"></div>
@@ -178,14 +248,29 @@ function App() {
 
           {error && <div className="error-banner">{error}</div>}
           {message && <div className="success-banner">{message}</div>}
+
           <form onSubmit={handleAuthSubmit} className="auth-form">
             <div className="input-group">
               <label>Email Address</label> 
-              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="name@example.com" />
+              <input 
+                type="email" 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)} 
+                required 
+                placeholder="name@example.com"
+                disabled={isLocked} // Disable input when locked
+              />
             </div>
             <div className="input-group">
               <label>Password</label>
-              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required placeholder="••••••••" />
+              <input 
+                type="password" 
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)} 
+                required 
+                placeholder="••••••••"
+                disabled={isLocked} // Disable input when locked
+              />
             </div>
 
             {!isLogin && (
@@ -201,8 +286,17 @@ function App() {
               </div>
             )}
 
-            <button type="submit" className="btn-primary" disabled={loading}>
-              {loading ? 'Processing...' : (isLogin ? 'Sign In' : 'Sign Up')}
+            <button 
+                type="submit" 
+                className="btn-primary" 
+                // Disable if Loading OR Locked
+                disabled={loading || isLocked}
+                style={isLocked ? { backgroundColor: '#9ca3af', cursor: 'not-allowed' } : {}}
+            >
+              {isLocked 
+                ? `Try again in ${timeLeft}s` 
+                : (loading ? 'Processing...' : (isLogin ? 'Sign In' : 'Sign Up'))
+              }
             </button>
           </form>
 
