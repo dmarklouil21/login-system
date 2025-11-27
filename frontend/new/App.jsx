@@ -68,7 +68,7 @@ function App() {
     }
   };
 
-  // Fetch API route that requires Firebase authentication (protected)
+  
   const fetchProtectedData = async () => {
     try {
    
@@ -88,7 +88,7 @@ function App() {
     }
   };
 
-  // Fetch public API route (no authentication required)
+  
   const fetchPublicData = async () => {
     try {
       const response = await axios.get('/api/public');
