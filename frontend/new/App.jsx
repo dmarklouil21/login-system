@@ -1,4 +1,3 @@
-// Import required libraries and Firebase authentication methods
 import React, { useState, useEffect } from 'react';
 import { 
   signInWithEmailAndPassword, 
@@ -59,7 +58,7 @@ function App() {
     }
   };
 
-  // Handle logout
+  
   const handleLogout = async () => {
     try {
       await signOut(auth);
