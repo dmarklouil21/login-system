@@ -14,20 +14,11 @@ function App() {
  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  
   const [user, setUser] = useState(null);
-
- 
   const [loading, setLoading] = useState(false);
-
- 
   const [protectedData, setProtectedData] = useState('');
-
-  // Stores any errors to display to the user
   const [error, setError] = useState('');
 
-  // Listen to Firebase authentication state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
    
