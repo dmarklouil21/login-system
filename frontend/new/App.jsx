@@ -62,7 +62,7 @@ function App() {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
     } catch (error) {
-      setError(error.message); // Display signup errors
+      setError(error.message); 
     } finally {
       setLoading(false);
     }
