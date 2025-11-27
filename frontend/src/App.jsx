@@ -77,6 +77,7 @@ function App() {
       setMessage('New verification email sent.');
     } catch (error) {
       setError('Please wait a few minutes before trying again.');
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -124,6 +125,7 @@ function App() {
       setError('');
     } catch (error) {
       setError(error.message);
+      console.error(error);
     }
   };
 
@@ -137,6 +139,7 @@ function App() {
       setProtectedData(response.data.message);
     } catch (error) {
       setError('Failed to fetch protected data');
+      console.error(error);
     } finally {
         setLoading(false);
     }
@@ -149,6 +152,7 @@ function App() {
       setProtectedData(response.data.message);
     } catch (error) {
       setError('Failed to fetch public data');
+      console.error(error);
     } finally {
         setLoading(false);
     }
