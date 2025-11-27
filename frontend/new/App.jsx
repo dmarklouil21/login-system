@@ -18,10 +18,10 @@ function App() {
   
   const [user, setUser] = useState(null);
 
-  // Loading state for async operations
+ 
   const [loading, setLoading] = useState(false);
 
-  // Stores data returned from backend endpoints
+ 
   const [protectedData, setProtectedData] = useState('');
 
   // Stores any errors to display to the user
