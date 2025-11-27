@@ -91,7 +91,7 @@ function App() {
         }
       });
 
-      // Display server response
+      
       setProtectedData(response.data.message);
     } catch (error) {
       setError('Failed to fetch protected data');
