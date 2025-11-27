@@ -71,10 +71,10 @@ function App() {
   // Fetch API route that requires Firebase authentication (protected)
   const fetchProtectedData = async () => {
     try {
-      // Get Firebase ID token of logged-in user
+   
       const token = await auth.currentUser.getIdToken();
 
-      // Send token to backend for verification
+      
       const response = await axios.get('/api/protected', {
         headers: {
           Authorization: `Bearer ${token}`
