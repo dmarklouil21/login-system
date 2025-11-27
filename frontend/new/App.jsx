@@ -143,7 +143,7 @@ function App() {
           </form>
         </div>
       ) : (
-        // If user is logged in, show dashboard
+      
         <div className="dashboard">
           <h2>Welcome, {user.email}!</h2>
 
