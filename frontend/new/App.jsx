@@ -11,7 +11,7 @@ import axios from 'axios';
 import './App.css';
 
 function App() {
-  // State variables for form inputs
+ 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
