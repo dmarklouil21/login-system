@@ -30,7 +30,7 @@ function App() {
   // Listen to Firebase authentication state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      // Set the user if logged in, otherwise null
+   
       setUser(user);
     });
 
