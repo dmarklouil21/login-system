@@ -98,7 +98,7 @@ function App() {
     }
   };
 
-  // Display loading screen while processing authentication
+  
   if (loading) {
     return <div className="container">Loading...</div>;
   }
