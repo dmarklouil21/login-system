@@ -34,7 +34,7 @@ function App() {
       setUser(user);
     });
 
-    // Cleanup listener on component unmount
+   
     return () => unsubscribe();
   }, []);
 
