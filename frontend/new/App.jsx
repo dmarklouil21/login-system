@@ -53,7 +53,7 @@ function App() {
     }
   };
 
-  // Handle new user signup
+  
   const handleSignup = async (e) => {
     e.preventDefault();
     setLoading(true);
