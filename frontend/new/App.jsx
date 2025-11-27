@@ -38,7 +38,7 @@ function App() {
     return () => unsubscribe();
   }, []);
 
-  // Handle user login
+  
   const handleLogin = async (e) => {
     e.preventDefault(); 
     setLoading(true);
